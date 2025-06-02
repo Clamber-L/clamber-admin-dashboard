@@ -1,0 +1,12 @@
+port:
+  8888
+wechat:
+  app_id: wx8ed8eafe67d4d7d3
+  secret: ac8b98555d16067538bd6324e5b9ee9c
+  #  redirect_url: 'https://58eaaeb3.r30.cpolar.top/'
+  redirect_url: 'http://127.0.0.1:3000'
+applet:
+  app_id: wx60bae7649ee78848
+  secret: 82274467d275e694514a3e97269c785c
+redis:
+  url: "rediss://default:AYClAAIjcDE0ZmQyNjQyNjg1NDI0Mjk5OWM5NzA1YzkyNDU2OWY1Y3AxMA@tolerant-raven-32933.upstash.io:6379"
