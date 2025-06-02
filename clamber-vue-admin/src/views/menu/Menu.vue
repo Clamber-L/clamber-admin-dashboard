@@ -231,7 +231,7 @@ const dialogTitle = computed(() => {
     return isEdit.value ? `编辑${type}` : `新建${type}`
 })
 
-const showDialog = (type: string, row: any) => {
+const showDialog = (_: string, row: any) => {
     showModel('menu', row, true)
 }
 

@@ -24,7 +24,6 @@ import { useSettingStore } from '@/store/modules/setting.ts'
 const { loginImage, loginImageLoaded } = storeToRefs(useSettingStore())
 
 const image = async () => {
-    console.log(loginImage)
     const response = await SettingApi.loginImage()
     if (response.code === ApiStatus.success && response.data.imageUrl !== '') {
         console.log(response.data)

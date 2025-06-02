@@ -1,5 +1,5 @@
 use crate::api::auth::entity::{
-    LoginParam, LoginResponse, PermissionMenuMeta, PermissionMenuResponse,
+    LoginParam, LoginResponse, PermissionMenuAuthList, PermissionMenuMeta, PermissionMenuResponse,
 };
 use crate::app_state::AppState;
 use axum::extract::State;
@@ -10,6 +10,7 @@ use lib_entity::mysql::{sys_permission, sys_role_permission, sys_user, sys_user_
 use lib_utils::password::verify_password;
 use lib_utils::result::{error_result, ok_result, ok_result_with_none};
 use sea_orm::prelude::Expr;
+use sea_orm::sea_query::ExprTrait;
 use sea_orm::{EntityTrait, QueryFilter};
 use std::collections::{HashMap, HashSet};
 
@@ -67,11 +68,31 @@ pub async fn permission_menu(
         .all(&state.mysql_client)
         .await?;
 
+    // 获取全部auth
+    let auth_permission = SysPermission::find()
+        .filter(
+            Expr::col(sys_permission::Column::Type)
+                .eq(2)
+                .and(Expr::col(sys_permission::Column::Path).eq("")),
+        )
+        .all(&state.mysql_client)
+        .await?;
+    println!("auth:{:?}", auth_permission);
+
+    let mut auth_map: HashMap<String, Vec<PermissionMenuAuthList>> = HashMap::new();
+
+    for permission in auth_permission {
+        auth_map
+            .entry(permission.parent_id.clone().unwrap())
+            .or_default()
+            .push(permission.into());
+    }
+
     // 组装数据
     let menus: Vec<PermissionMenuResponse> = permissions
         .into_iter()
         .map(|perm| PermissionMenuResponse {
-            id: perm.id,
+            id: perm.id.clone(),
             path: perm.path,
             name: perm.name,
             component: perm.component,
@@ -79,7 +100,7 @@ pub async fn permission_menu(
                 title: perm.title,
                 icon: perm.icon,
                 keep_alive: perm.keep_alive,
-                auth_list: None,
+                auth_list: auth_map.get(&perm.id).cloned(),
             },
             children: None,
             parent_id: perm.parent_id,

@@ -1,4 +1,3 @@
-use admin::init_router;
 use anyhow::Result;
 use axum::serve;
 use tokio::net::TcpListener;
@@ -7,6 +6,7 @@ use tracing::metadata::LevelFilter;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt::Layer, Layer as _};
+use dashboard_admin::init_router;
 
 #[tokio::main]
 async fn main() -> Result<()> {

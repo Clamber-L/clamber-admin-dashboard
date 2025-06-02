@@ -63,6 +63,8 @@ axiosInstance.interceptors.response.use(
             window.location.href = '/login'
         } else {
             const errorMessage = error.response?.data.message
+            console.log('error message:', errorMessage)
+            console.log('error :', error)
             ElMessage.error(
                 errorMessage
                     ? `${errorMessage} ${EmojiText[500]}`

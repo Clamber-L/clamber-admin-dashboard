@@ -17,6 +17,7 @@ pub struct Model {
     pub title: String,
     pub icon: Option<String>,
     pub keep_alive: bool,
+    pub r#type: i32
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

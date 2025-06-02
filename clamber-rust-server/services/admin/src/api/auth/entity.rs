@@ -1,3 +1,4 @@
+use lib_entity::mysql::sys_permission;
 use lib_entity::mysql::sys_user::Model;
 use serde::{Deserialize, Serialize};
 
@@ -51,5 +52,22 @@ pub struct PermissionMenuMeta {
     pub title: String,
     pub icon: Option<String>,
     pub keep_alive: bool,
-    pub auth_list: Option<Vec<String>>,
+    pub auth_list: Option<Vec<PermissionMenuAuthList>>,
+}
+
+#[derive(Serialize, Clone, Debug, Default)]
+pub struct PermissionMenuAuthList {
+    pub id: String,
+    pub title: String,
+    pub auth_mark: String,
+}
+
+impl From<sys_permission::Model> for PermissionMenuAuthList {
+    fn from(value: sys_permission::Model) -> Self {
+        Self {
+            id: value.id,
+            title: value.title,
+            auth_mark: value.name,
+        }
+    }
 }
