@@ -13,6 +13,7 @@ use sea_orm::prelude::Expr;
 use sea_orm::sea_query::ExprTrait;
 use sea_orm::{EntityTrait, QueryFilter};
 use std::collections::{HashMap, HashSet};
+use crate::api::auth::constants::PERMISSION_AUTH;
 
 pub async fn login(
     State(state): State<AppState>,
@@ -72,7 +73,7 @@ pub async fn permission_menu(
     let auth_permission = SysPermission::find()
         .filter(
             Expr::col(sys_permission::Column::Type)
-                .eq(2)
+                .eq(PERMISSION_AUTH)
                 .and(Expr::col(sys_permission::Column::Path).eq("")),
         )
         .all(&state.mysql_client)

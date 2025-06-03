@@ -5,6 +5,7 @@ use axum::Router;
 
 mod entity;
 mod service;
+mod constants;
 
 pub fn sys_auth_router() -> Router<AppState> {
     Router::new()

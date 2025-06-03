@@ -27,3 +27,4 @@ logs
 */.env.*
 
 */Cargo.lock
+*/target
