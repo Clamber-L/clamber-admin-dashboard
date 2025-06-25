@@ -1,3 +1,4 @@
+use crate::api::auth::constants::PERMISSION_AUTH;
 use crate::api::auth::entity::{
     LoginParam, LoginResponse, PermissionMenuAuthList, PermissionMenuMeta, PermissionMenuResponse,
 };
@@ -11,9 +12,8 @@ use lib_utils::password::verify_password;
 use lib_utils::result::{error_result, ok_result, ok_result_with_none};
 use sea_orm::prelude::Expr;
 use sea_orm::sea_query::ExprTrait;
-use sea_orm::{EntityTrait, QueryFilter};
+use sea_orm::{EntityTrait, QueryFilter, QueryOrder};
 use std::collections::{HashMap, HashSet};
-use crate::api::auth::constants::PERMISSION_AUTH;
 
 pub async fn login(
     State(state): State<AppState>,
@@ -66,6 +66,7 @@ pub async fn permission_menu(
     // 权限详情
     let permissions = SysPermission::find()
         .filter(Expr::col(sys_permission::Column::Id).is_in(perm_ids))
+        .order_by_desc(sys_permission::Column::Id)
         .all(&state.mysql_client)
         .await?;
 
@@ -137,16 +138,6 @@ fn build_menu_tree(menus_list: Vec<PermissionMenuResponse>) -> Vec<PermissionMen
                 }
             }
         }
-
-        // 有parent_id的子节点
-        // if let (Some(parent_id), Some(child)) = (
-        //     map.get(&id).and_then(|item| item.parent_id.clone()),
-        //     map.remove(&id),
-        // ) {
-        //     if let Some(mut parent) = map.get_mut(&parent_id) {
-        //         parent.children.get_or_insert(vec![]).push(child);
-        //     }
-        // }
     }
 
     // 处理其他的节点(顶层节点)
@@ -155,5 +146,18 @@ fn build_menu_tree(menus_list: Vec<PermissionMenuResponse>) -> Vec<PermissionMen
     }
 
     roots.sort_by(|a, b| a.id.cmp(&b.id));
+
+    for root in &mut roots {
+        sort_children_by_id(root);
+    }
     roots
+}
+
+fn sort_children_by_id(menu: &mut PermissionMenuResponse) {
+    if let Some(children) = menu.children.as_mut() {
+        children.sort_by(|a, b| a.id.cmp(&b.id));
+        for child in children {
+            sort_children_by_id(child);
+        }
+    }
 }
