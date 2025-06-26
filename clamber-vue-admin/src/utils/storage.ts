@@ -30,6 +30,8 @@ function validate(obj: any, schema: any, path: string = ''): boolean {
             return validate(obj[key], expectedType, fullPath)
         }
         if (actualType !== expectedType) {
+            console.log('actualType:', actualType)
+            console.log('expectedType:', expectedType)
             console.error(
                 `检测到本地数据异常 path：[/utils/storage.ts] ${fullPath} 数据类型应为 ${expectedType}，实际为 ${actualType}`
             )
@@ -70,16 +72,16 @@ export function validateStorageData() {
         user: {
             info: 'object',
             isLogin: 'boolean',
-            workTab: {
-                current: {
-                    title: 'string',
-                    path: 'string',
-                    name: 'string',
-                    params: 'object',
-                    query: 'object'
-                },
-                opened: 'object'
-            },
+            // workTab: {
+            //     current: {
+            //         title: 'string',
+            //         path: 'string',
+            //         name: 'string',
+            //         params: 'object',
+            //         query: 'object'
+            //     },
+            //     opened: 'object'
+            // },
             setting: {
                 systemThemeType: 'string',
                 systemThemeMode: 'string',
@@ -102,6 +104,7 @@ export function validateStorageData() {
 
     try {
         const data = getLocalStorageData()
+        console.log('localstorage data:', data)
         // 模拟本地数据类型错误
         // data.user.language = 2024
 
@@ -115,7 +118,8 @@ export function validateStorageData() {
         }
 
         return true
-    } catch {
+    } catch (e) {
+        console.log('error:', e)
         handleError()
         return false
     }
