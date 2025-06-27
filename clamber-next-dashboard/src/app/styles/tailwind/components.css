@@ -1,0 +1,16 @@
+@layer components {
+    /* 页面容器 */
+    .page-container {
+        @apply flex flex-auto flex-col mt-20 items-center;
+    }
+
+    /* 页面包装容器 */
+    .page-container > div {
+        @apply max-w-[90%] md:max-w-[80%] lg:max-w-[70%] xl:max-w-[60%] flex-auto mb-5;
+    }
+
+    /* 空白页样式,一般用于404和error页面 */
+    .page-blank {
+        @apply bg-white/80 h-56 w-full drop-shadow-lg rounded-md flex justify-center items-center;
+    }
+}
