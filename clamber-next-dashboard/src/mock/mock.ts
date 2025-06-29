@@ -8,7 +8,7 @@ export const mockMenus: MenuItem[] = [
         icon: 'dashboard',
     },
     {
-        label: 'Users',
+        label: 'Page',
         path: '/users',
         icon: 'users',
         permission: 'view_users',

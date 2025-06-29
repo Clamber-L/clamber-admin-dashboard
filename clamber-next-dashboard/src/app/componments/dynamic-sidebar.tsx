@@ -56,15 +56,15 @@ const items: MenuItem[] = [
     {
         label: 'Test',
         icon: 'users',
-        path: 'user',
+        path: 'tests',
         children: [
             {
-                label: 'Users',
-                path: '/user/users',
+                label: 'tests',
+                path: '/test/tests',
             },
             {
-                label: 'Roles',
-                path: '/user/roles',
+                label: 'TestRoles',
+                path: '/testRole/testRoles',
             },
         ],
     },
@@ -83,7 +83,7 @@ const renderMenu = (items: MenuItem[], navigate: AppRouterInstance) => {
                 <Collapsible key={item.label} open={openKey === key}>
                     <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                            <SidebarMenuButton onClick={() => setOpenKey(key)}>
+                            <SidebarMenuButton onClick={() => setOpenKey(item.label)}>
                                 {Icon && <Icon className="mr-2 h-4 w-4" />}
                                 {item.label}
                             </SidebarMenuButton>
@@ -110,11 +110,13 @@ const renderMenu = (items: MenuItem[], navigate: AppRouterInstance) => {
 export default function DynamicSidebar() {
     const navigate = useRouter();
     const pathname = usePathname();
-
+    console.log('pathname', pathname);
     // 工具函数：从当前路径找出应该展开哪些 key
     const collectOpenKeysFromPath = (items: MenuItem[], pathname: string): string => {
         for (const item of items) {
-            if (item.path && pathname.startsWith(item.path)) {
+            console.log(item.path);
+            if (item.path && pathname === item.path) {
+                console.log('label:', item.label);
                 return item.label;
             }
         }

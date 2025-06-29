@@ -45,6 +45,7 @@ pub async fn permission_menu(
     State(state): State<AppState>,
     user: JwtUser,
 ) -> ApiResult<Vec<PermissionMenuResponse>> {
+    println!("user:{:?}", user);
     // 获取用户角色
     let role_ids: Vec<String> = SysUserRole::find()
         .filter(Expr::col(sys_user_role::Column::UserId).eq(user.id))
