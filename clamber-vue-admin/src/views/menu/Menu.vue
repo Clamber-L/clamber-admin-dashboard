@@ -6,6 +6,7 @@
             >
         </el-row>
 
+        <!--    tableData    -->
         <art-table :data="tableData">
             <template #default>
                 <el-table-column label="菜单名称">
@@ -57,6 +58,7 @@
             </template>
         </art-table>
 
+        <!--   dialog     -->
         <el-dialog :title="dialogTitle" v-model="dialogVisible" width="700px" align-center>
             <el-form ref="formRef" :model="form" :rules="rules" label-width="85px">
                 <el-form-item label="菜单类型">
@@ -190,6 +192,7 @@ const { menuList } = storeToRefs(useMenuStore())
 const dialogVisible = ref(false)
 const form = reactive({
     // 菜单
+    id: '',
     name: '',
     path: '',
     label: '',
@@ -243,28 +246,30 @@ const submitForm = async () => {
     await formRef.value.validate(async (valid) => {
         if (valid) {
             try {
-                // const menuStore = useMenuStore()
-                // const params =
-                //   labelPosition.value === 'menu'
-                //     ? {
-                //         title: form.name,
-                //         path: form.path,
-                //         name: form.label,
-                //         icon: form.icon,
-                //         sort: form.sort,
-                //         isEnable: form.isEnable,
-                //         isMenu: form.isMenu,
-                //         keepAlive: form.keepAlive,
-                //         isHidden: form.isHidden,
-                //         link: form.link
-                //       }
-                //     : {
-                //         title: form.authName,
-                //         name: form.authLabel,
-                //         icon: form.authIcon,
-                //         sort: form.authSort
-                //       }
+                const params =
+                    labelPosition.value === 'menu'
+                        ? {
+                              id: form.id,
+                              title: form.name,
+                              path: form.path,
+                              name: form.label,
+                              icon: form.icon,
+                              sort: form.sort,
+                              isEnable: form.isEnable,
+                              isMenu: form.isMenu,
+                              keepAlive: form.keepAlive,
+                              isHidden: form.isHidden,
+                              link: form.link
+                          }
+                        : {
+                              id: form.id,
+                              title: form.authName,
+                              name: form.authLabel,
+                              icon: form.authIcon,
+                              sort: form.authSort
+                          }
 
+                console.log('param:', params)
                 if (isEdit.value) {
                     // await menuStore.updateMenu(params)
                 } else {
@@ -287,13 +292,15 @@ const showModel = (type: string, row?: any, lock: boolean = false) => {
     lockMenuType.value = lock
     resetForm()
 
+    console.log('row:', row)
+
     if (row) {
         isEdit.value = true
         nextTick(() => {
             // 回显数据
             if (type === 'menu') {
                 // 菜单数据回显
-                // console.log(row.meta)
+                form.id = row.id
                 form.name = row.meta.title
                 form.path = row.path
                 form.label = row.name

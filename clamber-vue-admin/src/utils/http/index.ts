@@ -13,6 +13,7 @@ const axiosInstance = axios.create({
         get: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
         post: { 'Content-Type': 'application/json;charset=utf-8' }
     },
+
     transformResponse: [
         (data, headers) => {
             const contentType = headers['content-type']

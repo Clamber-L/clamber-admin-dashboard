@@ -67,7 +67,7 @@ pub async fn permission_menu(
     // 权限详情
     let permissions = SysPermission::find()
         .filter(Expr::col(sys_permission::Column::Id).is_in(perm_ids))
-        .order_by_desc(sys_permission::Column::Id)
+        .order_by_desc(sys_permission::Column::Sort)
         .all(&state.mysql_client)
         .await?;
 
@@ -99,6 +99,7 @@ pub async fn permission_menu(
             path: perm.path,
             name: perm.name,
             component: perm.component,
+            sort: perm.sort,
             meta: PermissionMenuMeta {
                 title: perm.title,
                 icon: perm.icon,
@@ -156,7 +157,7 @@ fn build_menu_tree(menus_list: Vec<PermissionMenuResponse>) -> Vec<PermissionMen
 
 fn sort_children_by_id(menu: &mut PermissionMenuResponse) {
     if let Some(children) = menu.children.as_mut() {
-        children.sort_by(|a, b| a.id.cmp(&b.id));
+        children.sort_by(|a, b| a.sort.cmp(&b.sort));
         for child in children {
             sort_children_by_id(child);
         }

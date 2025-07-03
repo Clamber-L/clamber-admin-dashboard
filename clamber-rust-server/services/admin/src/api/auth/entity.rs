@@ -39,6 +39,7 @@ pub struct PermissionMenuResponse {
     pub path: String,
     pub name: String,
     pub component: String,
+    pub sort: i32,
     pub meta: PermissionMenuMeta,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<PermissionMenuResponse>>,
