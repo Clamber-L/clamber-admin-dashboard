@@ -106,6 +106,7 @@ pub async fn permission_menu(
                 keep_alive: perm.keep_alive,
                 auth_list: auth_map.get(&perm.id).cloned(),
             },
+            r#type: perm.r#type,
             children: None,
             parent_id: perm.parent_id,
         })

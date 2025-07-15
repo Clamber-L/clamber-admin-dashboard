@@ -47,7 +47,12 @@
 
                 <el-table-column fixed="right" label="操作" width="180">
                     <template #default="scope">
-                        <button-table type="add" v-auth="'add'" @click="showModel('menu')" />
+                        <!--           新增             -->
+                        <button-table
+                            type="add"
+                            v-auth="'add'"
+                            v-if="scope.row"
+                            @click="showModel('menu')" />
                         <button-table
                             type="edit"
                             v-auth="'edit'"
@@ -226,6 +231,7 @@ const rules = reactive<FormRules>({
 })
 
 const tableData = menuList.value
+console.log('tableData:', tableData)
 
 const isEdit = ref(false)
 const formRef = ref<FormInstance>()
@@ -271,8 +277,10 @@ const submitForm = async () => {
 
                 console.log('param:', params)
                 if (isEdit.value) {
+                    console.log('is edit')
                     // await menuStore.updateMenu(params)
                 } else {
+                    console.log('is insert')
                     // await menuStore.addMenu(params)
                 }
 
@@ -293,6 +301,7 @@ const showModel = (type: string, row?: any, lock: boolean = false) => {
     resetForm()
 
     console.log('row:', row)
+    console.log('menu list:', menuList)
 
     if (row) {
         isEdit.value = true

@@ -148,6 +148,7 @@ const isRouteRegistered = ref(false)
  * 路由全局前置守卫
  * 处理进度条、获取菜单列表、动态路由注册、404 检查、工作标签页及页面标题设置
  */
+// eslint-disable-next-line consistent-return
 router.beforeEach(async (to, _, next) => {
     const settingStore = useSettingStore()
     if (settingStore.showNprogress) NProgress.start()
@@ -157,6 +158,13 @@ router.beforeEach(async (to, _, next) => {
 
     // 检查登录状态，如果未登录则跳转到登录页
     const userStore = useUserStore()
+
+    if (!userStore.accessToken) {
+        userStore.logOut().then(() => {
+            return next('/login')
+        })
+    }
+
     if (!userStore.isLogin && to.path !== '/login' && !to.meta.noLogin) {
         userStore.logOut().then(() => {
             return next('/login')
@@ -167,6 +175,8 @@ router.beforeEach(async (to, _, next) => {
     if (!isRouteRegistered.value && userStore.isLogin) {
         try {
             await getMenuData()
+            // 标记路由已注册
+            isRouteRegistered.value = true
             if (to.name === 'Exception404') {
                 return next({ path: to.path, query: to.query, replace: true })
             }
@@ -214,8 +224,6 @@ async function getMenuData(): Promise<void> {
         useMenuStore().setMenuList(menuList as [])
         // 注册异步路由
         registerAsyncRoutes(router, menuList)
-        // 标记路由已注册
-        isRouteRegistered.value = true
     } catch (error) {
         console.error('获取菜单列表失败:', error)
         throw error

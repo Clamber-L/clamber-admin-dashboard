@@ -18,6 +18,8 @@ export const processRoute = (route: MenuListType, parentPath = ''): MenuListType
         name: route.name,
         path: currentPath,
         component: route.component,
+        type: route.type,
+        parentId: route.parentId,
         meta: route.meta ?? {}, // 使用空值合并运算符
         children: Array.isArray(route.children)
             ? route.children.map((child) => processRoute(child, currentPath))

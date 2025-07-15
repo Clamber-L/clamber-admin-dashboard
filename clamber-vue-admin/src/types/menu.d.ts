@@ -3,6 +3,8 @@ export type MenuListType = {
     path: string // 路由
     name: string // 组件名
     component?: string // 改为字符串类型，表示组件路径
+    type: number
+    parentId: string
     meta: {
         title: string // 菜单名称
         icon?: string // 菜单图标

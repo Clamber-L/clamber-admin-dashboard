@@ -45,6 +45,7 @@ pub struct PermissionMenuResponse {
     pub children: Option<Vec<PermissionMenuResponse>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
+    pub r#type: i32
 }
 
 #[derive(Serialize, Clone, Debug, Default)]
