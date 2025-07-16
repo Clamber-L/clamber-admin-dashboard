@@ -57,11 +57,7 @@ axiosInstance.interceptors.response.use(
         console.log('response error', error)
         if (axios.isCancel(error)) {
             console.log(`repeated request: ${error.message}`)
-        } else if (error.response.status === 401 && !error.config.__isRetryRequest) {
-            // 设置标识，避免循环出现401错误
-            error.config.__isRetryRequest = true
-            // 执行重新身份验证的操作，例如跳转到登录页面
-            window.location.href = '/login'
+            ElMessage.error(`网络连接失败！${EmojiText[500]}`)
         } else {
             const errorMessage = error.response?.data.message
             console.log('error message:', errorMessage)

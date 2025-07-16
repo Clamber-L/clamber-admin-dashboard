@@ -1,7 +1,7 @@
 <template>
     <div class="page-content">
         <el-row :gutter="20" style="margin-left: 15px">
-            <el-button v-auth="'add'" @click="showModel('menu', null, true)" v-ripple
+            <el-button v-auth="'add'" @click="showModel('menu', '', null, true)" v-ripple
                 >添加菜单</el-button
             >
         </el-row>
@@ -51,8 +51,8 @@
                         <button-table
                             type="add"
                             v-auth="'add'"
-                            v-if="scope.row"
-                            @click="showModel('menu')" />
+                            v-if="scope.row && !scope.row.parentId"
+                            @click="showModel('menu', scope.row.id)" />
                         <button-table
                             type="edit"
                             v-auth="'edit'"
@@ -202,6 +202,7 @@ const form = reactive({
     path: '',
     label: '',
     icon: '',
+    parentId: '',
     isEnable: true,
     sort: 1,
     isMenu: true,
@@ -231,17 +232,16 @@ const rules = reactive<FormRules>({
 })
 
 const tableData = menuList.value
-console.log('tableData:', tableData)
-
+const insertParentId = ref('')
 const isEdit = ref(false)
 const formRef = ref<FormInstance>()
 const dialogTitle = computed(() => {
     const type = labelPosition.value === 'menu' ? '菜单' : '权限'
-    return isEdit.value ? `编辑${type}` : `新建${type}`
+    return isEdit.value ? `编辑${type}` : `新建子${type}`
 })
 
 const showDialog = (_: string, row: any) => {
-    showModel('menu', row, true)
+    showModel('menu', '', row, true)
 }
 
 const handleChange = () => {}
@@ -261,6 +261,7 @@ const submitForm = async () => {
                               name: form.label,
                               icon: form.icon,
                               sort: form.sort,
+                              parentId: insertParentId.value,
                               isEnable: form.isEnable,
                               isMenu: form.isMenu,
                               keepAlive: form.keepAlive,
@@ -293,15 +294,15 @@ const submitForm = async () => {
     })
 }
 
-const showModel = (type: string, row?: any, lock: boolean = false) => {
+const showModel = (type: string, parentId: string, row?: any, lock: boolean = false) => {
     dialogVisible.value = true
     labelPosition.value = type
     isEdit.value = false
     lockMenuType.value = lock
+    insertParentId.value = parentId
     resetForm()
 
     console.log('row:', row)
-    console.log('menu list:', menuList)
 
     if (row) {
         isEdit.value = true
@@ -314,6 +315,7 @@ const showModel = (type: string, row?: any, lock: boolean = false) => {
                 form.path = row.path
                 form.label = row.name
                 form.icon = row.meta.icon
+                form.parentId = row.parentId
                 form.sort = row.meta.sort || 1
                 form.isMenu = row.meta.isMenu
                 form.keepAlive = row.meta.keepAlive
