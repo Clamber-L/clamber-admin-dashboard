@@ -20,3 +20,18 @@ export type MenuListType = {
     }
     children?: MenuListType[] // 子菜单
 }
+
+export type MenuEditType = {
+    id: string
+    title: string
+    path?: string
+    name: string
+    icon: string
+    sort: number
+    parentId?: string
+    isEnable?: boolean
+    isMenu?: boolean
+    keepAlive?: boolean
+    isHidden?: boolean
+    link?: string
+}

@@ -45,7 +45,7 @@ pub struct PermissionMenuResponse {
     pub children: Option<Vec<PermissionMenuResponse>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
-    pub r#type: i32
+    pub r#type: i32,
 }
 
 #[derive(Serialize, Clone, Debug, Default)]
@@ -72,4 +72,21 @@ impl From<sys_permission::Model> for PermissionMenuAuthList {
             auth_mark: value.name,
         }
     }
+}
+
+#[derive(Deserialize, Debug, Default, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct PermissionSaveParam {
+    pub icon: Option<String>,
+    pub id: Option<String>,
+    pub is_enable: Option<bool>,
+    pub is_hidden: Option<bool>,
+    pub is_menu: Option<bool>,
+    pub keep_alive: Option<bool>,
+    pub link: Option<String>,
+    pub name: String,
+    pub parent_id: String,
+    pub path: String,
+    pub sort: i32,
+    pub title: String,
 }

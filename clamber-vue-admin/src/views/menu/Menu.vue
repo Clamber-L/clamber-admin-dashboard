@@ -191,6 +191,9 @@ import { useMenuStore } from '@/store/modules/menu'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { IconTypeEnum } from '@/enums/appEnum'
+import { MenuEditType } from '@/types/menu'
+import { menuService } from '@/api/menuApi.ts'
+import { ApiStatus } from '@/utils/http/status.ts'
 
 const { menuList } = storeToRefs(useMenuStore())
 
@@ -252,7 +255,7 @@ const submitForm = async () => {
     await formRef.value.validate(async (valid) => {
         if (valid) {
             try {
-                const params =
+                const params: MenuEditType =
                     labelPosition.value === 'menu'
                         ? {
                               id: form.id,
@@ -277,16 +280,17 @@ const submitForm = async () => {
                           }
 
                 console.log('param:', params)
-                if (isEdit.value) {
-                    console.log('is edit')
-                    // await menuStore.updateMenu(params)
-                } else {
-                    console.log('is insert')
-                    // await menuStore.addMenu(params)
+                if (!isEdit.value) {
+                    params.id = ''
                 }
-
-                ElMessage.success(`${isEdit.value ? '编辑' : '新增'}成功`)
-                dialogVisible.value = false
+                const response = await menuService.saveMenu(params)
+                console.log('response:', response)
+                if (response.code === ApiStatus.success) {
+                    ElMessage.success(`${isEdit.value ? '编辑' : '新增'}成功`)
+                    dialogVisible.value = false
+                } else {
+                    ElMessage.error(`${isEdit.value ? '编辑' : '新增'}失败`)
+                }
             } catch {
                 ElMessage.error(`${isEdit.value ? '编辑' : '新增'}失败`)
             }

@@ -1,4 +1,4 @@
-import { MenuListType } from '@/types/menu'
+import { MenuEditType, MenuListType } from '@/types/menu'
 import api from '@/utils/http'
 import { BaseResult } from '@/types/axios'
 
@@ -8,5 +8,9 @@ export const menuService = {
     async getMenuList() {
         // 获取到的菜单数据
         return api.get<BaseResult<MenuListType[]>>('/auth/permission_menu')
+    },
+
+    async saveMenu(menu: MenuEditType) {
+        return api.post<BaseResult<MenuEditType>>('/auth/save_permission', menu)
     }
 }

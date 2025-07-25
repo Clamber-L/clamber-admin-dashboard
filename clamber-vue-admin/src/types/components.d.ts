@@ -58,6 +58,8 @@ declare module 'vue' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTimeline: typeof import('element-plus/es')['ElTimeline']
+    ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ExcelExport: typeof import('./../components/Form/ExcelExport.vue')['default']
     ExcelImport: typeof import('./../components/Form/ExcelImport.vue')['default']
     Exception: typeof import('./../components/Views/Exception.vue')['default']

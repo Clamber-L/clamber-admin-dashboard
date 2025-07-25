@@ -1,7 +1,5 @@
 use crate::api::auth::constants::PERMISSION_AUTH;
-use crate::api::auth::entity::{
-    LoginParam, LoginResponse, PermissionMenuAuthList, PermissionMenuMeta, PermissionMenuResponse,
-};
+use crate::api::auth::entity::*;
 use crate::app_state::AppState;
 use axum::extract::State;
 use lib_core::jwt::{generate_jwt, JwtUser};
@@ -11,7 +9,6 @@ use lib_entity::mysql::{sys_permission, sys_role_permission, sys_user, sys_user_
 use lib_utils::password::verify_password;
 use lib_utils::result::{error_result, ok_result, ok_result_with_none};
 use sea_orm::prelude::Expr;
-use sea_orm::sea_query::ExprTrait;
 use sea_orm::{EntityTrait, QueryFilter, QueryOrder};
 use std::collections::{HashMap, HashSet};
 
@@ -163,4 +160,14 @@ fn sort_children_by_id(menu: &mut PermissionMenuResponse) {
             sort_children_by_id(child);
         }
     }
+}
+
+pub async fn save_permission(
+    State(state): State<AppState>,
+    user: JwtUser,
+    ExtractJson(param): ExtractJson<PermissionSaveParam>,
+) -> ApiResult<String> {
+    println!("user:{:?}", user);
+    println!("params: {:?}", param);
+    Ok(ok_result_with_none())
 }
